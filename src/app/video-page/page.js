@@ -1,5 +1,11 @@
 "use client";
-import { useEffect } from "react";
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+} from "@material-tailwind/react";
 
 const startVideo = () => {
   const videoElement = document.querySelector("#webcam-video");
@@ -18,31 +24,35 @@ const startVideo = () => {
 
 const stopVideo = () => {
   const videoElement = document.querySelector("#webcam-video");
-  videoElement.pause();
-  videoElement.srcObject = null;
+  if (videoElement.srcObject) {
+    videoElement.srcObject.getTracks().forEach((track) => track.stop());
+    videoElement.srcObject = null;
+  }
 };
 
 export default function VideoPage() {
   return (
     <main>
-      <h1 className="text-8xl w-fit mx-auto my-3">Hand Tracking</h1>
-      <video
-        id="webcam-video"
-        className="w-[90%] bg-gray-400 mx-auto my-10 rounded-md [transform:rotateY(180deg)]"
-      ></video>
+      <h1 className="text-3xl font-bold tracking-wide w-fit mx-auto my-3">
+        Hand Tracking
+      </h1>
+      <Card className="mb-5">
+        <CardHeader></CardHeader>
+        <CardBody>
+          <video
+            id="webcam-video"
+            className="w-[50rem] h-[30rem] bg-gray-400 mx-auto rounded-md [transform:rotateY(180deg)]"
+          ></video>
+        </CardBody>
+        <CardFooter></CardFooter>
+      </Card>
       <div className="flex space-x-4 w-full mx-auto justify-center">
-        <button
-          onClick={startVideo}
-          className="text-3xl font-sans hover:bg-blue-400 text-slate-300 hover:text-slate-800 px-[6px] py-[3px] rounded-md transition-all duration-200"
-        >
+        <Button onClick={startVideo} color="green">
           Start
-        </button>
-        <button
-          onClick={stopVideo}
-          className="text-3xl font-sans hover:bg-blue-400 text-slate-300 hover:text-slate-800 px-[6px] py-[3px] rounded-md transition-all duration-200"
-        >
+        </Button>
+        <Button onClick={stopVideo} color="red">
           Stop
-        </button>
+        </Button>
       </div>
     </main>
   );
