@@ -14,24 +14,48 @@ const startVideo = (setProgress, setVideoState, videoState, model) => {
     setProgress(50);
     setVideoState(true);
     if (status) {
-      runDetection(model, canvas, context, videoState, video);
+      runDetection(
+        model,
+        canvas,
+        context,
+        videoState,
+        video,
+        setProgress,
+        setVideoState
+      );
     }
     setProgress(100);
   });
 };
 
-const runDetection = (model, canvas, context, play, video) => {
+const runDetection = (
+  model,
+  canvas,
+  context,
+  play,
+  video,
+  setProgress,
+  setVideoState
+) => {
   try {
     model.detect(video).then((predictions) => {
       model.renderPredictions(predictions, canvas, context, video);
       requestAnimationFrame(() =>
-        runDetection(model, canvas, context, play, video)
+        runDetection(
+          model,
+          canvas,
+          context,
+          play,
+          video,
+          setProgress,
+          setVideoState
+        )
       );
     });
   } catch (err) {
     // video was not loaded, try again
-    stopVideo();
-    startVideo();
+    stopVideo(setProgress, setVideoState);
+    startVideo(setProgress, setVideoState, videoState, model);
   }
 };
 
